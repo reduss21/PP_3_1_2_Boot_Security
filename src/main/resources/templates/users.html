@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:align="center">Пользователи</title>
+</head>
+<body>
+<table >
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Возраст</th>
+        <th>Логин</th>
+        <th >Роли</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:utext="${user.id}">...</td>
+        <td th:utext="${user.name}">...</td>
+        <td th:utext="${user.lastName}">...</td>
+        <td th:utext="${user.age}">...</td>
+        <td th:utext="${user.username}">...</td>
+        <td th:utext="${user.getRolesToString()}">...</td>
+        <td>
+            <form th:method="GET" th:action="@{'/admin/' + ${user.id}+'/edit'}" th:object="${user}">
+                <input type="submit" value="изменить"/>
+            </form>
+        </td>
+        <td>
+            <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.id})}" th:object="${user}">
+            <input type="submit" value="Удалить"/>
+        </form>
+        </td>
+    </tr>
+</table>
+<form method="LINK" action="/admin/new">
+    <input type="submit" value="Создать нового пользователя">
+</form>
+
+
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Logout"/>
+</form>
+
+</body>
+</html>
