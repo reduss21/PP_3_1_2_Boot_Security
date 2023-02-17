@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class MyUser implements Serializable, UserDetails {
+public class User implements Serializable, UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -41,13 +41,13 @@ public class MyUser implements Serializable, UserDetails {
     @Size(min = 2, message = "Ввести не менее 2-х знаков")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles;
 
-    public MyUser() {
+    public User() {
     }
 
-    public MyUser(long id, String name, String lastName, Integer age, String username, String password, Set<Role> roles) {
+    public User(long id, String name, String lastName, Integer age, String username, String password, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -56,14 +56,6 @@ public class MyUser implements Serializable, UserDetails {
         this.password = password;
         this.roles = roles;
     }
-
-    public MyUser(int id, String name, String lastName, Integer age) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
-    }
-
 
     public long getId() {
         return id;
@@ -160,7 +152,7 @@ public class MyUser implements Serializable, UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MyUser that = (MyUser) o;
+        User that = (User) o;
         return Objects.equals(name, that.name) && Objects.equals(lastName, that.lastName) && Objects.equals(age, that.age);
     }
 

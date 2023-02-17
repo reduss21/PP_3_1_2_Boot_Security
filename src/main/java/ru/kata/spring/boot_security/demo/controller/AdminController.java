@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.models.MyUser;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
+import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
@@ -19,13 +19,13 @@ public class AdminController {
 
     private final String firstPage = "redirect:/admin";
     private final UserService usServ;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
 
     @Autowired
-    public AdminController(UserService usServ, RoleRepository roleRepository) {
+    public AdminController(UserService usServ, RoleService roleService) {
         this.usServ = usServ;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     @GetMapping()
@@ -35,7 +35,7 @@ public class AdminController {
     }
 
     @PostMapping()
-    public String createUser(@ModelAttribute("user") @Valid MyUser user, BindingResult bindingResult) {
+    public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "new";
         usServ.saveUser(user);
         return firstPage;
@@ -43,20 +43,20 @@ public class AdminController {
 
     @GetMapping("/new")
     public String newUser(Model model) {
-        model.addAttribute("user", new MyUser());
-        model.addAttribute("allRoles", roleRepository.findAll());
+        model.addAttribute("user", new User());
+        model.addAttribute("allRoles", roleService.allRoles());
         return "new";
     }
 
     @GetMapping("{id}/edit")
     public String edit(Model model, @PathVariable("id") Long id) {
         model.addAttribute("user", usServ.findUserById(id));
-        model.addAttribute("allRoles", roleRepository.findAll());
+        model.addAttribute("allRoles", roleService.allRoles());
         return "edit";
     }
 
     @PatchMapping("/{id}")
-    public String updateUser(@ModelAttribute("user") @Valid MyUser user, BindingResult bindingResult,
+    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                              @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) return "edit";
         usServ.update(user);

@@ -3,7 +3,7 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.models.MyUser;
+import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import java.util.List;
@@ -22,23 +22,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MyUser findUserById(Long id) {
+    public User findUserById(Long id) {
         return userRepository.findUserById(id);
     }
 
     @Override
-    public List<MyUser> allUsers() {
+    public List<User> allUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public boolean saveUser(MyUser myUser) {
-        MyUser myUserFromDB = userRepository.findByUsername(myUser.getUsername());
-        if (myUserFromDB != null) {
+    public boolean saveUser(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if (userFromDB != null) {
             return false;
         }
-        myUser.setPassword(bCryptPasswordEncoder.encode(myUser.getPassword()));
-        userRepository.save(myUser);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
         return true;
     }
 
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(MyUser user) {
+    public void update(User user) {
         userRepository.save(user);
     }
 
