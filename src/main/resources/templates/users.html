@@ -21,7 +21,7 @@
         <td th:utext="${user.lastName}">...</td>
         <td th:utext="${user.age}">...</td>
         <td th:utext="${user.username}">...</td>
-        <td th:utext="${user.getRolesToString()}">...</td>
+        <td><p th:each="role : ${user.getRoles()}" th:text="${role.name}"></p>...</td>
         <td>
             <form th:method="GET" th:action="@{'/admin/' + ${user.id}+'/edit'}" th:object="${user}">
                 <input type="submit" value="изменить"/>
